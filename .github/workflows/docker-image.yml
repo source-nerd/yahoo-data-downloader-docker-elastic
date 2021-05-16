@@ -8,7 +8,7 @@ on:
 
 env:
   IMAGE_NAME: us-data-downloader-yfinance
-
+  VERSION: $(date +%s)
 jobs:
 
   build:
@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag $IMAGE_NAME:$(date +%s)
+      run: docker build . --file Dockerfile --tag $IMAGE_NAME:${VERSION}
     - name: Log into GitHub Container Registry
       run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
     - name: Push image to GitHub Container Registry
@@ -26,13 +26,6 @@ jobs:
         IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
         # Change all uppercase to lowercase
         IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-        # Strip git ref prefix from version
-        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-        # Strip "v" prefix from tag name
-        # [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-        # Use Docker `latest` tag convention
-        # [ "$VERSION" == "master" ] && VERSION=latest
-        VERSION=$(date +%s)
         echo "IMAGE_ID = ${IMAGE_ID}"
         echo "VERSION = ${VERSION}"
         docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
