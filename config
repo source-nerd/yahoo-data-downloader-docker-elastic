@@ -1,0 +1,9 @@
+ES_HOST=elasticsearch.equitian-elk.svc.cluster.local
+ES_PORT=9200
+ES_USERNAME=elastic
+ES_PASSWORD=5qq17MySsmBhN4DFvsJW
+
+INDEX_1_MIN=us_tickers_1m
+INDEX_1_DAY=us_tickers_1d
+
+STOCKS=AAPL,TSLA,MSFT
