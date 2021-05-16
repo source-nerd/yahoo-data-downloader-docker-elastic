@@ -8,7 +8,7 @@ on:
 
 env:
   IMAGE_NAME: us-data-downloader-yfinance
-  VERSION: $(date +%s)
+  VERSION: ${date +%s}
 jobs:
 
   build:
