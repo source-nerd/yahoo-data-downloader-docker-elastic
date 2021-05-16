@@ -1,27 +1,32 @@
-apiVersion: v1
-kind: Pod
+apiVersion: batch/v1
+kind: CronJob
 metadata:
   name: data-downloader-pod
   namespace: equitian-app
 spec:
-  imagePullSecrets:
-    - name: regcred
-  containers:
-  - name: data-downloader-container
-    image: docker.pkg.github.com/source-nerd/yahoo-data-downloader-docker-elastic/yahoo-data-downloader-docker-elastic:0.1
-    env:
-    - name: ES_HOST
-      value: ES_HOST
-    - name: ES_PORT
-      value: "9200"
-    - name: ES_USERNAME
-      value: "elastic"
-    - name: ES_PASSWORD
-      value: ES_PASSWORD
-    - name: INDEX_1_MIN
-      value: INDEX_1_MIN
-    - name: INDEX_1_DAY
-      value: INDEX_1_DAY
-    - name: STOCKS
-      value: "AAPL,TSLA,MSFT"
-  restartPolicy: OnFailure
+  schedule: "30 20 * * 1,2,3,4,5"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regcred
+          containers:
+          - name: data-downloader-container
+            image: docker.pkg.github.com/source-nerd/yahoo-data-downloader-docker-elastic/yahoo-data-downloader-docker-elastic:0.1
+            env:
+            - name: ES_HOST
+              value: "elasticsearch.NAMESPACE.svc.cluster.local"
+            - name: ES_PORT
+              value: "9200"
+            - name: ES_USERNAME
+              value: "elastic"
+            - name: ES_PASSWORD
+              value: "ES_PASSWORD"
+            - name: INDEX_1_MIN
+              value: "INDEX_1_MIN"
+            - name: INDEX_1_DAY
+              value: "INDEX_1_DAY"
+            - name: STOCKS
+              value: "AAPL,AMZN,AMD,FB,FISV,GS,GOOGL,INTC,MCD,MSFT,NVDA,PG,TSLA,V"
+          restartPolicy: OnFailure

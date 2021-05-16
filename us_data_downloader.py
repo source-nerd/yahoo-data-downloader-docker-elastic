@@ -91,9 +91,10 @@ def day_downloader_main():
 
     for item in STOCKS_LIST:
         res_data = download_1d_data(item, today_date, today_date)
-        helpers.bulk(
-            es_client, doc_generator(res_data, item, "Date", INDEX_1_DAY)
-        )
+        if res_data.shape[0] > 0:
+            helpers.bulk(
+                es_client, doc_generator(res_data, item, "Date", INDEX_1_DAY)
+            )
     LOGGER.info(f"Done downloading data for - [{today_date}]")
 
 
