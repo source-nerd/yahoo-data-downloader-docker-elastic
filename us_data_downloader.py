@@ -86,11 +86,12 @@ def get_es_client():
 
 def day_downloader_main():
     today_date = datetime.today().strftime("%Y-%m-%d")
+    end_date = (datetime.today() + timedelta(days=1)).strftime("%Y-%m-%d")
     LOGGER.info(f"Downloading day's worth of data for date - [{today_date}]")
     es_client = get_es_client()
 
     for item in STOCKS_LIST:
-        res_data = download_1d_data(item, today_date, today_date)
+        res_data = download_1d_data(item, today_date, end_date)
         if res_data.shape[0] > 0:
             helpers.bulk(
                 es_client, doc_generator(res_data, item, "Date", INDEX_1_DAY)

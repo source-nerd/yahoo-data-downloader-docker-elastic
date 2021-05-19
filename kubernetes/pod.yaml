@@ -13,7 +13,7 @@ spec:
             - name: regcred
           containers:
           - name: data-downloader-container
-            image: docker.pkg.github.com/source-nerd/yahoo-data-downloader-docker-elastic/yahoo-data-downloader-docker-elastic:0.1
+            image: ghcr.io/source-nerd/yahoo-data-downloader-docker-elastic/us-data-downloader-yfinance:1621193180
             env:
             - name: ES_HOST
               value: "elasticsearch.NAMESPACE.svc.cluster.local"
